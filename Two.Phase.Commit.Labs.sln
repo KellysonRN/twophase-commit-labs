@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoPhaseCommit.Labs.Domain.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoPhaseCommit.Labs.Domain", "src\TwoPhaseCommit.Labs.Domain\TwoPhaseCommit.Labs.Domain.csproj", "{0E4CEF54-502B-020F-274C-AE365C6E4248}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoPhaseCommit.Labs.Application", "src\TwoPhaseCommit.Labs.Application\TwoPhaseCommit.Labs.Application.csproj", "{0D5CC43E-EB7C-4555-8277-4EB9583192D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0E4CEF54-502B-020F-274C-AE365C6E4248}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E4CEF54-502B-020F-274C-AE365C6E4248}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E4CEF54-502B-020F-274C-AE365C6E4248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5CC43E-EB7C-4555-8277-4EB9583192D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5CC43E-EB7C-4555-8277-4EB9583192D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5CC43E-EB7C-4555-8277-4EB9583192D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5CC43E-EB7C-4555-8277-4EB9583192D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
