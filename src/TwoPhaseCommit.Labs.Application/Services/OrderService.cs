@@ -6,8 +6,23 @@ namespace TwoPhaseCommit.Labs.Application.Services;
 
 public class OrderService(IOrderRepository orderRepository) : IOrderService
 {
-    public Task CreateOrderAsync(Order order, CancellationToken cancellationToken = default)
+    public async Task<Order> CreateOrderAsync(Order order, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await orderRepository.SaveAsync(order);
+
+            order.Activate();
+
+            await orderRepository.SaveAsync(order);
+
+            return order;
+        }
+        catch
+        {
+            order.Fail();
+            await orderRepository.SaveAsync(order);
+            throw;
+        }
     }
 }

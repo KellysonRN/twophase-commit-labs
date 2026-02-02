@@ -26,15 +26,19 @@ public class OrderServiceTests
         var order = Order.Create(orderId);
         order.AddItem(OrdemItem.Create(Guid.NewGuid()));
 
+        var savedStatuses = new List<State>();
 
-        await _service.CreateOrderAsync(order);
-             
-        _repositoryMock.Verify(
-            r => r.SaveAsync(It.Is<Order>(o => o.Status == State.Pending)),
-            Times.Once);
+        _repositoryMock
+            .Setup(r => r.SaveAsync(It.IsAny<Order>()))
+            .Callback<Order>(o => savedStatuses.Add(o.Status))
+            .Returns(Task.CompletedTask);
 
-        _repositoryMock.Verify(
-            r => r.SaveAsync(It.Is<Order>(o => o.Status == State.Active)),
-            Times.Once);
+        var orderCreated = await _service.CreateOrderAsync(order);
+
+        Assert.Contains(State.Pending, savedStatuses);
+        Assert.Contains(State.Active, savedStatuses);
+
+        _repositoryMock.Verify(r => r.SaveAsync(It.IsAny<Order>()), Times.Exactly(2));
+
     }
 }
