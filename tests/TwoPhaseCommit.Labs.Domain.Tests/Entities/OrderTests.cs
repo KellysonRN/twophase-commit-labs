@@ -1,4 +1,6 @@
 using FluentAssertions;
+using TwoPhaseCommit.Labs.Domain.Entities;
+using TwoPhaseCommit.Labs.Domain.ValueObjects;
 
 namespace TwoPhaseCommit.Labs.Domain.Tests.Entities;
 
