@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TwoPhaseCommit.Labs.Domain\TwoPhaseCommit.Labs.Domain.csproj" />
   </ItemGroup>
 

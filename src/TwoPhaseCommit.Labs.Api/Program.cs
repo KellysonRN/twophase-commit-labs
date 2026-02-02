@@ -1,8 +1,13 @@
-    var builder = WebApplication.CreateBuilder(args);
+using TwoPhaseCommit.Labs.Application.Interface;
+using TwoPhaseCommit.Labs.Application.Services;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 
