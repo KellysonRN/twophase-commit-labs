@@ -12,28 +12,31 @@ public class OrderTests
     {
         var order = Order.Create(Guid.NewGuid());
 
-        order.Status.Should().Be(OrderStatus.Pending);
+        order.Status.Should().Be(State.Pending);
     }
 
     [Fact]
     public void Order_can_be_activated_from_pending()
     {
         var order = Order.Create(Guid.NewGuid());
+        order.AddItem(Item.Create(Guid.NewGuid())); 
 
         order.Activate();
 
-        order.Status.Should().Be(OrderStatus.Active);
+        order.Status.Should().Be(State.Active);
     }
 
     [Fact]
     public void Order_cannot_be_activated_if_not_pending()
     {
         var order = Order.Create(Guid.NewGuid());
+        order.AddItem(Item.Create(Guid.NewGuid()));
+
         order.Fail();
 
         Action act = () => order.Activate();
 
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<BusinessRuleViolationException>();
     }
 
     [Fact]
@@ -43,18 +46,20 @@ public class OrderTests
 
         order.Fail();
 
-        order.Status.Should().Be(OrderStatus.Failed);
+        order.Status.Should().Be(State.Failed);
     }
 
     [Fact]
     public void Order_cannot_fail_if_not_pending()
     {
         var order = Order.Create(Guid.NewGuid());
+        order.AddItem(Item.Create(Guid.NewGuid()));
+
         order.Activate();
 
         Action act = () => order.Fail();
 
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<InvalidStateTransitionException>();
     }
 
     [Fact]
@@ -81,7 +86,7 @@ public class OrderTests
         item2.Fail();
         order.Fail();
              
-        order.Status.Should().Be(OrderStatus.Failed);
+        order.Status.Should().Be(State.Failed);
     }
 
     [Fact]
@@ -96,8 +101,8 @@ public class OrderTests
              
         Action act = () => order.Activate();
              
-        act.Should().Throw<DomainException>()
-           .WithMessage("*item*failed*");
+        act.Should().Throw<BusinessRuleViolationException>()
+           .WithMessage("Order cannot be activated if any item has failed.");
     }
 
     [Fact]
@@ -110,9 +115,9 @@ public class OrderTests
         order.AddItem(item);
         order.Fail();
                 
-        Action act = () => item.Activate();
+        Action act = () => order.Activate();
                 
-        act.Should().Throw<DomainException>();
+        act.Should().Throw<BusinessRuleViolationException>();
     }
 
     [Fact]
@@ -123,7 +128,7 @@ public class OrderTests
              
         Action act = () => order.Activate();
                 
-        act.Should().Throw<InvalidStateTransitionException>();
+        act.Should().Throw<BusinessRuleViolationException>();
     }
 
     [Fact]
@@ -133,7 +138,7 @@ public class OrderTests
              
         Action act = () => order.Activate();
                 
-        act.Should().Throw<DomainException>()
+        act.Should().Throw<BusinessRuleViolationException>()
            .WithMessage("*at least one item*");
     }
 
@@ -145,6 +150,6 @@ public class OrderTests
 
         order.Fail();
              
-        order.Status.Should().Be(OrderStatus.Failed);
+        order.Status.Should().Be(State.Failed);
     }
 }

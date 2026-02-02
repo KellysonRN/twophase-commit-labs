@@ -2,7 +2,7 @@
 
 namespace TwoPhaseCommit.Labs.Domain.ValueObjects;
 
-public enum OrderStatus
+public enum State
 {
     Pending,
     Active,

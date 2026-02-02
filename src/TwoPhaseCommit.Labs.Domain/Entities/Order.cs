@@ -1,3 +1,6 @@
+using TwoPhaseCommit.Labs.Domain.Exceptions;
+using TwoPhaseCommit.Labs.Domain.Interfaces;
+using TwoPhaseCommit.Labs.Domain.Policies;
 using TwoPhaseCommit.Labs.Domain.ValueObjects;
 
 namespace TwoPhaseCommit.Labs.Domain.Entities;
@@ -6,40 +9,78 @@ public sealed class Order
 {
     public Guid OrderId { get; private set; }
 
-    public OrderStatus Status { get; private set; }
+    public State Status { get; private set; } = State.Pending;
 
     public IReadOnlyCollection<Item> Items => _items;
 
     private readonly List<Item> _items = [];
 
-    public Order() { }
+    private readonly IStateTransitionPolicy<State> _stateTransitionPolicy;
+
+    public Order(IStateTransitionPolicy<State> stateTransitionPolicy) => _stateTransitionPolicy = stateTransitionPolicy;
 
     public static Order Create(Guid id)
     {
-        return new Order
+        return new Order(new StatePolicy())
         {
-            OrderId = id,
-            Status = OrderStatus.Pending
+            OrderId = id
         };
     }
 
-    public void AddItem(Item item) => _items.Add(item);
+    public void AddItem(Item item)
+    {
+        if (Status != State.Pending)
+            throw new BusinessRuleViolationException(
+                "Items can only be added while the order is pending.");
+
+        _items.Add(item);
+    }
 
     public void Activate()
     {
-        EnsurePending();
-        Status = OrderStatus.Active;
+        if (!_items.Any())
+            throw new BusinessRuleViolationException(
+                "An order must have at least one item to be activated.");
+
+        if (_items.Any(i => i.IsFailed()))
+            throw new BusinessRuleViolationException(
+                "Order cannot be activated if any item has failed.");
+
+        ChangeStatus(State.Active);
+    }
+
+    public void ActivateItem(Guid itemId)
+    {
+        if (Status == State.Failed)
+            throw new BusinessRuleViolationException(
+                "Cannot activate items when the order has failed.");
+
+        var item = _items.Single(i => i.ItemId == itemId);
+
+        item.Activate();
     }
 
     public void Fail()
     {
-        EnsurePending();
-        Status = OrderStatus.Failed;
+        ChangeStatus(State.Failed);
+
+        foreach (var item in _items)
+            item.Fail();
     }
 
-    private void EnsurePending()
+    public bool IsFailed()
+      => Status == State.Failed;
+
+    private void ChangeStatus(State newStatus)
     {
-        if (Status != OrderStatus.Pending)
-            throw new InvalidOperationException("Invalid state transition");
+        if (!_stateTransitionPolicy.CanTransition(Status, newStatus))
+            throw new InvalidStateTransitionException(
+                nameof(Order),
+                Status.ToString(),
+                newStatus.ToString());
+
+        
+
+        Status = newStatus;
     }
 }
