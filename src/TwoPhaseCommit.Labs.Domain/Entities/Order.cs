@@ -11,9 +11,9 @@ public sealed class Order
 
     public State Status { get; private set; } = State.Pending;
 
-    public IReadOnlyCollection<Item> Items => _items;
+    public IReadOnlyCollection<OrdemItem> Items => _items;
 
-    private readonly List<Item> _items = [];
+    private readonly List<OrdemItem> _items = [];
 
     private readonly IStateTransitionPolicy<State> _stateTransitionPolicy;
 
@@ -27,7 +27,7 @@ public sealed class Order
         };
     }
 
-    public void AddItem(Item item)
+    public void AddItem(OrdemItem item)
     {
         if (Status != State.Pending)
             throw new BusinessRuleViolationException(
@@ -55,7 +55,7 @@ public sealed class Order
             throw new BusinessRuleViolationException(
                 "Cannot activate items when the order has failed.");
 
-        var item = _items.Single(i => i.ItemId == itemId);
+        var item = _items.Single(i => i.OrdemItemId == itemId);
 
         item.Activate();
     }

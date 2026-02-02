@@ -19,7 +19,7 @@ public class OrderTests
     public void Order_can_be_activated_from_pending()
     {
         var order = Order.Create(Guid.NewGuid());
-        order.AddItem(Item.Create(Guid.NewGuid())); 
+        order.AddItem(OrdemItem.Create(Guid.NewGuid())); 
 
         order.Activate();
 
@@ -30,7 +30,7 @@ public class OrderTests
     public void Order_cannot_be_activated_if_not_pending()
     {
         var order = Order.Create(Guid.NewGuid());
-        order.AddItem(Item.Create(Guid.NewGuid()));
+        order.AddItem(OrdemItem.Create(Guid.NewGuid()));
 
         order.Fail();
 
@@ -53,7 +53,7 @@ public class OrderTests
     public void Order_cannot_fail_if_not_pending()
     {
         var order = Order.Create(Guid.NewGuid());
-        order.AddItem(Item.Create(Guid.NewGuid()));
+        order.AddItem(OrdemItem.Create(Guid.NewGuid()));
 
         order.Activate();
 
@@ -66,7 +66,7 @@ public class OrderTests
     public void Order_should_contain_added_items()
     {
         var order = Order.Create(Guid.NewGuid());
-        var item = Item.Create(Guid.NewGuid());
+        var item = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item);
 
@@ -77,8 +77,8 @@ public class OrderTests
     public void Order_should_be_marked_as_failed_when_any_item_fails()
     {
         var order = Order.Create(Guid.NewGuid());
-        var item1 = Item.Create(Guid.NewGuid());
-        var item2 = Item.Create(Guid.NewGuid());
+        var item1 = OrdemItem.Create(Guid.NewGuid());
+        var item2 = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item1);
         order.AddItem(item2);
@@ -94,7 +94,7 @@ public class OrderTests
     {
      
         var order = Order.Create(Guid.NewGuid());
-        var item = Item.Create(Guid.NewGuid());
+        var item = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item);
         item.Fail();
@@ -110,7 +110,7 @@ public class OrderTests
     {
         
         var order = Order.Create(Guid.NewGuid());
-        var item = Item.Create(Guid.NewGuid());
+        var item = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item);
         order.Fail();

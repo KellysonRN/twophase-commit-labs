@@ -9,21 +9,21 @@ using TwoPhaseCommit.Labs.Domain.ValueObjects;
 namespace TwoPhaseCommit.Labs.Domain.Entities;
 
 
-public class Item
+public class OrdemItem
 {
-    public Guid ItemId { get; private set; }
+    public Guid OrdemItemId { get; private set; }
 
     public State Status { get; private set; } = State.Pending;
 
     private readonly IStateTransitionPolicy<State> _stateTransitionPolicy;
 
-    public Item(IStateTransitionPolicy<State> stateTransitionPolicy) => _stateTransitionPolicy = stateTransitionPolicy;
+    public OrdemItem(IStateTransitionPolicy<State> stateTransitionPolicy) => _stateTransitionPolicy = stateTransitionPolicy;
 
-    public static Item Create(Guid itemId)
+    public static OrdemItem Create(Guid ordemItemId)
     {
-        return new Item(new StatePolicy())
+        return new OrdemItem(new StatePolicy())
         {
-            ItemId = itemId
+            OrdemItemId = ordemItemId
         };
     }  
 
@@ -38,7 +38,7 @@ public class Item
     {
         if (!_stateTransitionPolicy.CanTransition(Status, newStatus))
             throw new InvalidStateTransitionException(
-                nameof(Order),
+                nameof(OrdemItem),
                 Status.ToString(),
                 newStatus.ToString());
 
