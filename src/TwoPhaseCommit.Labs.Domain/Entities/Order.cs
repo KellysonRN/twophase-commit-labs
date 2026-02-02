@@ -4,7 +4,7 @@ namespace TwoPhaseCommit.Labs.Domain.Entities;
 
 public sealed class Order
 {
-    public string OrderId { get; private set; }
+    public Guid OrderId { get; private set; }
 
     public OrderStatus Status { get; private set; }
 
@@ -12,7 +12,16 @@ public sealed class Order
 
     private readonly List<Item> _items = [];
 
-    public Order(string orderId) => OrderId = orderId;
+    public Order() { }
+
+    public static Order Create(Guid id)
+    {
+        return new Order
+        {
+            OrderId = id,
+            Status = OrderStatus.Pending
+        };
+    }
 
     public void AddItem(Item item) => _items.Add(item);
 
