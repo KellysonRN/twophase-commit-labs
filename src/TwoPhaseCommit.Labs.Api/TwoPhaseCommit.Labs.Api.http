@@ -1,0 +1,6 @@
+@TwoPhaseCommit.Labs.Api_HostAddress = http://localhost:5186
+
+GET {{TwoPhaseCommit.Labs.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
