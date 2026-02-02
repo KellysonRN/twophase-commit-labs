@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TwoPhaseCommit.Labs.Application\TwoPhaseCommit.Labs.Application.csproj" />
     <ProjectReference Include="..\TwoPhaseCommit.Labs.Domain\TwoPhaseCommit.Labs.Domain.csproj" />
   </ItemGroup>
 
