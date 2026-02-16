@@ -25,7 +25,7 @@ public class OrdemItem
         {
             OrdemItemId = ordemItemId
         };
-    }  
+    }
 
     internal void Activate() => ChangeStatus(State.Active);
 

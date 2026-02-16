@@ -19,7 +19,7 @@ public class OrderTests
     public void Order_can_be_activated_from_pending()
     {
         var order = Order.Create(Guid.NewGuid());
-        order.AddItem(OrdemItem.Create(Guid.NewGuid())); 
+        order.AddItem(OrdemItem.Create(Guid.NewGuid()));
 
         order.Activate();
 
@@ -82,25 +82,25 @@ public class OrderTests
 
         order.AddItem(item1);
         order.AddItem(item2);
-             
+
         item2.Fail();
         order.Fail();
-             
+
         order.Status.Should().Be(State.Failed);
     }
 
     [Fact]
     public void Order_should_not_be_activated_if_any_item_is_failed()
     {
-     
+
         var order = Order.Create(Guid.NewGuid());
         var item = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item);
         item.Fail();
-             
+
         Action act = () => order.Activate();
-             
+
         act.Should().Throw<BusinessRuleViolationException>()
            .WithMessage("Order cannot be activated if any item has failed.");
     }
@@ -108,15 +108,15 @@ public class OrderTests
     [Fact]
     public void Item_should_not_be_activated_when_parent_order_is_failed()
     {
-        
+
         var order = Order.Create(Guid.NewGuid());
         var item = OrdemItem.Create(Guid.NewGuid());
 
         order.AddItem(item);
         order.Fail();
-                
+
         Action act = () => order.Activate();
-                
+
         act.Should().Throw<BusinessRuleViolationException>();
     }
 
@@ -125,31 +125,31 @@ public class OrderTests
     {
         var order = Order.Create(Guid.NewGuid());
         order.Fail();
-             
+
         Action act = () => order.Activate();
-                
+
         act.Should().Throw<BusinessRuleViolationException>();
     }
 
     [Fact]
     public void Order_should_not_be_activated_without_items()
-    {        
+    {
         var order = Order.Create(Guid.NewGuid());
-             
+
         Action act = () => order.Activate();
-                
+
         act.Should().Throw<BusinessRuleViolationException>()
            .WithMessage("*at least one item*");
     }
 
     [Fact]
     public void Marking_failed_order_as_failed_again_should_be_idempotent()
-    {        
+    {
         var order = Order.Create(Guid.NewGuid());
         order.Fail();
 
         order.Fail();
-             
+
         order.Status.Should().Be(State.Failed);
     }
 }

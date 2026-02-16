@@ -21,7 +21,7 @@ public class OrderServiceTests
 
     [Fact]
     public async Task CreateOrder_should_persist_and_activate_order()
-    {        
+    {
         var orderId = Guid.NewGuid();
 
         var order = Order.Create(orderId);
@@ -57,9 +57,9 @@ public class OrderServiceTests
            .Setup(r => r.SaveAsync(It.IsAny<Order>()))
            .Callback<Order>(o => savedStatuses.Add(o.Status))
            .ThrowsAsync(new Exception("db error"));
-             
+
         Func<Task> act = () => _service.CreateOrderAsync(order);
-                
+
         await act.Should().ThrowAsync<Exception>();
 
         Assert.Contains(State.Pending, savedStatuses);
@@ -82,9 +82,9 @@ public class OrderServiceTests
             .Setup(r => r.SaveAsync(It.IsAny<Order>()))
             .Callback<Order>(o => callSequence.Add(o.Status))
             .Returns(Task.CompletedTask);
-             
+
         await _service.CreateOrderAsync(order);
-                
+
         callSequence.Should().ContainInOrder(
             State.Pending,
             State.Active);

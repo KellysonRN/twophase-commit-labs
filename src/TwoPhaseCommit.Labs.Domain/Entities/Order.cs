@@ -79,8 +79,6 @@ public sealed class Order
                 Status.ToString(),
                 newStatus.ToString());
 
-        
-
         Status = newStatus;
     }
 }
